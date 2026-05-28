@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ระบบใบเสนอราคารถยนต์</title>
+
+<style>
+@page {
+    size: A4;
+    margin: 10mm;
+}
+*{
+    box-sizing:border-box;
+    font-family:Tahoma,sans-serif;
+
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+}
+*{
+    box-sizing:border-box;
+    font-family:Tahoma,sans-serif;
+}
+
+body{
+    margin:0;
+    background:#edf1f5;
+    padding:20px;
+}
+
+.toolbar{
+    max-width:1300px;
+    margin:auto;
+    background:#fff;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom:20px;
+}
+
+.toolbar h1{
+    margin-top:0;
+    color:#d60000;
+}
+
+.form-section{
+    margin-top:10px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.form-section-title{
+    background:#111827;
+    color:#fff;
+    padding:14px 18px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.form-grid{
+    padding:18px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:10px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+    font-size:14px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:14px;
+}
+
+button{
+    border:none;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    color:#fff;
+    font-size:15px;
+    margin-top:20px;
+    margin-right:10px;
+}
+
+.btn-update{
+    background:#d60000;
+}
+
+.btn-print{
+    background:#111827;
+}
+
+.quotation{
+    width:210mm;
+    min-height:297mm;
+    background:#fff;
+    margin:auto;
+    padding:30px;
+    box-shadow:0 0 15px rgba(0,0,0,0.15);
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:25px;
+}
+
+.logo{
+    font-size:36px;
+    font-weight:bold;
+    color:#d60000;
+}
+
+.logo small{
+    display:block;
+    font-size:14px;
+    color:#444;
+    font-style:italic;
+}
+
+.title{
+    text-align:center;
+    flex:1;
+}
+
+.title h1{
+    margin:0;
+    font-size:36px;
+}
+
+.badge{
+    background:#d60000;
+    color:#fff;
+    display:inline-block;
+    padding:8px 22px;
+    border-radius:30px;
+    margin-top:10px;
+    font-size:20px;
+}
+
+.info-right{
+    text-align:right;
+    font-size:20px;
+}
+
+.summary{
+    border:2px solid #ddd;
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.summary-header{
+    background:#d60000;
+    color:#fff;
+    padding:14px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.summary table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.summary td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    font-size:18px;
+}
+
+.red{
+    color:#d60000;
+    font-weight:bold;
+}
+
+.big{
+    font-size:34px;
+}
+
+.section{
+    margin-top:25px;
+}
+
+.section-title{
+    background:#111827;
+    color:#fff;
+    padding:12px;
+    border-radius:8px 8px 0 0;
+    font-size:20px;
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.table th{
+    background:#f3f4f6;
+}
+
+.table th,
+.table td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+.info-box{
+    border:2px solid #d60000;
+    border-radius:5px;
+    padding:6px 10px;
+}
+
+.info-box h3{
+    margin:0 0 6px 0;
+    font-size:16px;
+}
+
+.info-box ul{
+    margin:0;
+    padding-left:16px;
+}
+
+.info-box li{
+    margin-bottom:2px;
+    line-height:1.2;
+    font-size:16px;
+}
+.bottom-grid{
+    display:flex;
+    gap:20px;
+}
+
+.bottom-grid > div{
+    flex:1;
+}
+
+.card{
+    border-top:3px solid #ddd;
+    padding-top:15px;
+}
+
+.footer{
+    margin-top:25px;
+    text-align:center;
+    color:#777;
+    font-size:13px;
+}
+
+@media print{ @page{ size:A4; margin:8mm; } html, body{ background:#fff !important; margin:0 !important; padding:0 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; } .toolbar{ display:none !important; } .quotation{ width:100% !important; min-height:auto !important; margin:0 auto !important; padding:0 !important; background:#fff !important; box-shadow:none !important; display:block !important; overflow:visible !important; } /* บังคับ 2 column ตอน print */ .bottom-grid{ display:grid !important; grid-template-columns:1fr 1fr !important; gap:7px !important; align-items:start !important; } /* กันข้อมูลโดนตัด */ .section, .summary, .table, .info-box, .card{ break-inside:avoid !important; page-break-inside:avoid !important; } table{ width:100% !important; } /* ย่อขนาดตอน print */ .summary td, .table td, .table th, .info-box li, .card p{ font-size:12px !important; } .summary td{ padding:5px !important; } .table td, .table th{ padding:4px !important; } .summary-header{ font-size:10px !important; padding:8px !important; } .section-title{ font-size:12px !important; padding:6px !important; } .logo{ font-size:22px !important; } .logo small{ font-size:10px !important; } .title h1{ font-size:24px !important; } .info-right{ font-size:10px !important; } }
+
+@media(max-width:900px){
+
+    .bottom-grid{
+        grid-template-columns:1fr;
+    }
+
+    .quotation{
+        width:100%;
+        min-height:auto;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="toolbar">
+
+    <h1> คำนวณใบเสนอราคารถยนต์โตโยต้า </h1>
+
+    <!-- รายละเอียดลูกค้า -->
+
+    <div class="form-section">
+        <div class="form-section-title">
+            1. รายละเอียดลูกค้า
+        </div>
+
+        <div class="form-grid">
+
+            <div>
+                <label>ชื่อลูกค้า</label>
+                <input type="text"
+                id="customer"
+                value="คุณกอล์ฟ">
+            </div>
+	<div>
+   		 <label>เบอร์โทรลูกค้า</label>
+    		<input type="text" id="phone" value="081-xxx-xxxx">
+	</div>
+	</div>
+</div>
+
+
+
+    <!-- รายละเอียดรถยนต์ -->
+
+    <div class="form-section">
+        <div class="form-section-title">
+            2. รายละเอียดรถยนต์
+            </div>
+        <div class="form-grid">
+<div>
+                <label>รุ่นรถ</label>
+                <input type="text"
+                id="model"
+                value="Toyota Yaris ATIV Smart">
+            </div>
+
+            <div>
+                <label>สีรถ</label>
+                <input type="text"
+                id="color"
+                value="ขาวมุก Platinum White Pearl">
+            </div>
+
+            <div>
+                <label>ราคารถ</label>
+                <input type="number"
+                id="price"
+                value="599000">
+            </div>
+		<div>
+    <label>ส่วนลดพิเศษ</label>
+    <input type="number"
+    id="discount"
+    value="0">
+</div>
+
+            <div>
+                <label>เงินดาวน์</label>
+                <input type="number"
+                id="down"
+                value="50000">
+            </div>
+
+            <div>
+                <label>เงินมัดจำ</label>
+                <input type="number"
+                id="deposit"
+                value="5000">
+            </div>
+
+            <div>
+                <label>ค่าจดทะเบียน</label>
+                <input type="number"
+                id="register"
+                value="0">
+            </div>
+
+            <div>
+                <label>ค่าประกันภัย</label>
+                <input type="number"
+                id="insurance"
+                value="18000">
+            </div>
+
+            <div>
+                <label>ค่าพ.ร.บ.</label>
+                <input type="number"
+                id="act"
+                value="0">
+            </div>
+
+            <div>
+                <label>ค่ามัดจำป้ายแดง</label>
+                <input type="number"
+                id="redplate"
+                value="3000">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- รายละเอียดดอกเบี้ย -->
+
+    <div class="form-section">
+
+        <div class="form-section-title">
+            3. รายละเอียดดอกเบี้ย
+        </div>
+
+        <div class="form-grid">
+
+            <div>
+                <label>48 เดือน (%)</label>
+                <input type="number"
+                id="interest48"
+                value="2.59">
+            </div>
+
+            <div>
+                <label>60 เดือน (%)</label>
+                <input type="number"
+                id="interest60"
+                value="2.79">
+            </div>
+
+            <div>
+                <label>72 เดือน (%)</label>
+                <input type="number"
+                id="interest72"
+                value="2.99">
+            </div>
+
+            <div>
+                <label>84 เดือน (%)</label>
+                <input type="number"
+                id="interest84"
+                value="3.29">
+            </div>
+
+        </div>
+
+    </div>
+
+    <button class="btn-update"
+    onclick="generateQuotation()">
+        อัปเดตใบเสนอราคา
+    </button>
+
+    <button class="btn-print"
+    onclick="window.print()">
+        พิมพ์ / Save PDF
+    </button>
+<br>
+</div>
+<br><br>
+
+<div class="quotation">
+
+    <div class="header">
+
+        <div class="logo">
+            TOYOTA
+ 	<small> สำนักงานขาย โตโยต้านนทบุรี <br>สาขาแจ้งวัฒนะ </small>
+        </div>
+
+        <div class="title">
+
+            <h1>ใบเสนอราคา</h1>
+
+        </div>
+
+        <div class="info-right">
+
+            <div>
+                วันที่ :
+                <span id="todayDate"></span>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- สรุปราคา -->
+
+    <div class="summary">
+
+        <div class="summary-header">
+            สรุปรายการใบเสนอราคา
+        </div>
+
+        <table>
+		<tr>
+    			<td>ชื่อลูกค้า</td>
+   	 		<td class="red" id="showCustomerName"></td>
+		</tr>
+
+		<tr>
+    			<td>เบอร์โทร</td>
+    			<td class="red" id="showCustomerPhone"></td>
+		</tr>
+            <tr>
+                <td>รุ่นรถ</td>
+                <td class="red" id="showModel"></td>
+            </tr>
+
+            <tr>
+                <td>สีรถ</td>
+                <td class="red" id="showColor"></td>
+            </tr>
+
+            <tr>
+                <td>ราคารถ</td>
+                <td class="red" id="showPrice"></td>
+            </tr>
+
+            <tr>
+                <td>เงินดาวน์</td>
+                <td class="red" id="showDown"></td>
+            </tr>
+
+            <tr>
+                <td>ยอดจัดไฟแนนซ์</td>
+                <td class="red" id="showFinance"></td>
+            </tr>
+
+        </table>
+
+    </div>
+<!-- ตารางค่างวด + ค่าใช้จ่าย (2 COLUMN) -->
+<div class="section">
+
+    <div class="bottom-grid">
+
+        <!-- LEFT : ตารางค่างวด -->
+        <div>
+
+            <div class="section-title">
+                ตารางค่างวด
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>จำนวนงวด</th>
+                        <th>ดอกเบี้ย</th>
+                        <th>ค่างวด / เดือน</th>
+                    </tr>
+                </thead>
+
+                <tbody id="installmentTable"></tbody>
+
+            </table>
+
+        </div>
+
+        <!-- RIGHT : ค่าใช้จ่ายวันออกรถ -->
+        <div>
+
+            <div class="section-title">
+                สรุปค่าใช้จ่ายวันออกรถ
+            </div>
+
+            <table class="table">
+
+                <tbody>
+
+                    <tr>
+                        <td>เงินดาวน์</td>
+                        <td id="showDownExpense"></td>
+                    </tr>
+<tr>
+    <td>ส่วนลดพิเศษ</td>
+    <td id="showDiscount"></td>
+</tr>
+
+                    <tr>
+                        <td>ค่าจดทะเบียน</td>
+                        <td id="showRegister"></td>
+                    </tr>
+
+                    <tr>
+                        <td>ค่าประกันภัย</td>
+                        <td id="showInsurance"></td>
+                    </tr>
+
+                    <tr>
+                        <td>ค่าพ.ร.บ.</td>
+                        <td id="showAct"></td>
+                    </tr>
+
+                    <tr>
+                        <td>ค่ามัดจำป้ายแดง</td>
+                        <td id="showRedPlate"></td>
+                    </tr>
+
+                    <tr>
+                        <td>หักเงินมัดจำ</td>
+                        <td id="showDeposit"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="red">รวมค่าใช้จ่ายวันออกรถ</td>
+                        <td class="red" id="showTotalExpense"></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- เอกสาร + ของแถม (2 COLUMN) -->
+<div class="section">
+
+    <div class="bottom-grid">
+
+        <!-- LEFT : เอกสาร -->
+        <div class="info-box">
+
+            <h3>
+                เอกสารที่ลูกค้าต้องเตรียมวันรับรถ
+            </h3>
+
+            <ul>
+
+                <li>สำเนาบัตรประชาชน 4 ชุด</li>
+                <li>สำเนาทะเบียนบ้าน 4 ชุด</li>
+                <li>สลิปเงินเดือนย้อนหลัง 3 เดือน</li>
+                <li>สำเนาสมุดบัญชีธนาคารย้อนหลัง 6 เดือน</li>
+                <li>หนังสือรับรองการทำงาน</li>
+		<li>หนังสือมอบอำนาจ 1 ชุด เพื่อจดทะเบียน</li>
+		<li>.................................................................</li>
+		<li>.................................................................</li>
+		<li>.................................................................</li>
+            </ul>
+
+        </div>
+
+        <!-- RIGHT : ของแถม -->
+        <div class="info-box">
+            <h3>รายการของแถม</h3>
+
+            <ul>
+                <li>แพ็กเก็จเคลือบสี 6ปี 24ครั้ง(ไม่รวมค่าบริการ)</li>
+		<li>แพ็กเก็จพ่นสนิม 6ปี 12ครั้ง(ไม่รวมค่าบริการ)</li>
+                <li>ผ้ายางปูพื้นของโตโยต้า</li>
+                <li>กรอบป้ายทะเบียนของโตโยต้านนทบุรี</li>
+                <li>ฟิล์มกรองแสงรอบคัน</li>
+		<li>ฟรีค่าแรงเช็คระยะ 1,000 - 50,000 km</li>
+		<li>รับประกันรถ 5 ปี หรือ 150,000 km</li>
+		<li>บริการ Toyota T-Connect</li>
+		<li>น้ำมันวันออกรถ</li>
+		<li>..................................................................</li>
+		<li>..................................................................</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+    <!-- ผู้เสนอราคา -->
+<br>
+
+    <div class="bottom-grid">
+
+        <div class="card">
+
+            <h3>พนักงานขาย</h3>
+
+            <p>
+                สิทธิศักดิ์ สันคำ (เซลล์อาร์ต) <br>
+                มือถือ 099-416-2110 <br>
+                สำนักงานขาย โตโยต้า นนทบุรี สาขาแจ้งวัฒนะ
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>หมายเหตุ</h3>
+
+            <p>
+                ราคาใช้อ้างอิงได้ 15วัน นับแต่วันได้รับใบเสนอราคา<br>
+                อัตราดอกเบี้ยอาจเปลี่ยนแปลงตามเงื่อนไขธนาคาร
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Toyota Quotation System
+    </div>
+
+</div>
+
+<script>
+
+function formatNumber(num){
+
+    return Number(num).toLocaleString('th-TH');
+
+}
+
+function showFree(value){
+
+    if(Number(value) === 0){
+
+        return 'ฟรี';
+
+    }
+
+    return formatNumber(value) + ' บาท';
+
+}
+
+function calculateInstallment(
+    finance,
+    yearRate,
+    months
+){
+
+    let interest =
+        finance * (yearRate / 100);
+
+    let total =
+        finance + interest;
+
+    return total / months;
+
+}
+
+function generateQuotation(){
+
+    let customer =
+        document.getElementById('customer').value;
+
+    let phone =
+        document.getElementById('phone').value;
+
+    let model =
+        document.getElementById('model').value;
+
+    let color =
+        document.getElementById('color').value;
+
+    let price =
+        Number(document.getElementById('price').value);
+
+let discount =
+    Number(document.getElementById('discount').value);
+
+    let down =
+        Number(document.getElementById('down').value);
+
+    let deposit =
+        Number(document.getElementById('deposit').value);
+
+    let register =
+        Number(document.getElementById('register').value);
+
+    let insurance =
+        Number(document.getElementById('insurance').value);
+
+    let act =
+        Number(document.getElementById('act').value);
+
+    let redplate =
+        Number(document.getElementById('redplate').value);
+
+let finance =
+    price - down - discount;
+
+    let totalExpense =
+        down +
+        register +
+        insurance +
+        act +
+        redplate -
+        deposit;
+
+    document.getElementById('showCustomerName').innerText =
+        customer;
+
+    document.getElementById('showCustomerPhone').innerText =
+        phone;
+
+    document.getElementById('showModel').innerText =
+        model;
+
+    document.getElementById('showColor').innerText =
+        color;
+
+document.getElementById('showDiscount').innerText =
+    showFree(discount);
+
+    document.getElementById('showPrice').innerText =
+        formatNumber(price) + ' บาท';
+
+    document.getElementById('showDown').innerText =
+        formatNumber(down) + ' บาท';
+
+    document.getElementById('showFinance').innerText =
+        formatNumber(finance) + ' บาท';
+
+    document.getElementById('showDownExpense').innerText =
+        formatNumber(down) + ' บาท';
+
+    document.getElementById('showRegister').innerText =
+        showFree(register);
+
+    document.getElementById('showInsurance').innerText =
+        showFree(insurance);
+
+    document.getElementById('showAct').innerText =
+        showFree(act);
+
+    document.getElementById('showRedPlate').innerText =
+        showFree(redplate);
+
+    document.getElementById('showDeposit').innerText =
+        '- ' + showFree(deposit);
+
+    document.getElementById('showTotalExpense').innerText =
+        formatNumber(totalExpense) + ' บาท';
+
+    let plans = [
+
+        {
+            month:48,
+            interest:Number(
+                document.getElementById('interest48').value
+            )
+        },
+
+        {
+            month:60,
+            interest:Number(
+                document.getElementById('interest60').value
+            )
+        },
+
+        {
+            month:72,
+            interest:Number(
+                document.getElementById('interest72').value
+            )
+        },
+
+        {
+            month:84,
+            interest:Number(
+                document.getElementById('interest84').value
+            )
+        }
+
+    ];
+
+    let html = '';
+
+    plans.forEach(plan => {
+
+        let payment =
+            calculateInstallment(
+                finance,
+                plan.interest,
+                plan.month
+            );
+
+        html += `
+
+        <tr>
+
+            <td>
+                ${plan.month} เดือน
+            </td>
+
+            <td>
+                ${plan.interest}%
+            </td>
+
+            <td class="red">
+                ${formatNumber(
+                    payment.toFixed(0)
+                )} บาท
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+    document.getElementById(
+        'installmentTable'
+    ).innerHTML = html;
+
+}
+
+document.getElementById('todayDate').innerText =
+new Date().toLocaleDateString('th-TH');
+
+generateQuotation();
+
+</script>
+
+</body>
+</html>
