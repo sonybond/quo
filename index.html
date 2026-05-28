@@ -351,7 +351,7 @@ button{
             </div>
 
             <div>
-                <label>เงินมัดจำ</label>
+                <label>เงินจอง</label>
                 <input type="number"
                 id="deposit"
                 value="5000">
@@ -508,6 +508,10 @@ button{
                 <td>เงินดาวน์</td>
                 <td class="red" id="showDown"></td>
             </tr>
+		<tr>
+    			<td>ส่วนลดพิเศษ</td>
+    			<td class="red" id="showDiscount"></td>
+		</tr>
 
             <tr>
                 <td>ยอดจัดไฟแนนซ์</td>
@@ -559,10 +563,6 @@ button{
                         <td>เงินดาวน์</td>
                         <td id="showDownExpense"></td>
                     </tr>
-<tr>
-    <td>ส่วนลดพิเศษ</td>
-    <td id="showDiscount"></td>
-</tr>
 
                     <tr>
                         <td>ค่าจดทะเบียน</td>
@@ -585,7 +585,7 @@ button{
                     </tr>
 
                     <tr>
-                        <td>หักเงินมัดจำ</td>
+                        <td>หักเงินจอง</td>
                         <td id="showDeposit"></td>
                     </tr>
 
@@ -711,7 +711,17 @@ function showFree(value){
     return formatNumber(value) + ' บาท';
 
 }
+function showFree2(value){
 
+    if(Number(value) === 0){
+
+        return '0';
+
+    }
+
+    return formatNumber(value) + ' บาท';
+
+}
 function calculateInstallment(
     finance,
     yearRate,
@@ -793,7 +803,7 @@ let finance =
         color;
 
 document.getElementById('showDiscount').innerText =
-    showFree(discount);
+    showFree2(discount);
 
     document.getElementById('showPrice').innerText =
         formatNumber(price) + ' บาท';
